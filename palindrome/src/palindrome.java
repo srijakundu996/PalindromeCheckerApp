@@ -26,52 +26,31 @@ public class palindrome  {
         return prev;
     }
 
+    public static boolean isPalindrome(String str, int start, int end) {
+        // Base condition: crossed pointers or single character
+        if (start >= end) {
+            return true;
+        }
+
+        // Check current characters
+        if (str.charAt(start) != str.charAt(end)) {
+            return false;
+        }
+
+        // Recursive call for inner substring
+        return isPalindrome(str, start + 1, end - 1);
+    }
+
     public static void main(String[] args) {
 
         // Hardcoded string
         String text = "madam";
 
-        // Convert string to linked list
-        Node head = null;
-        Node tail = null;
-        for (int i = 0; i < text.length(); i++) {
-            Node newNode = new Node(text.charAt(i));
-            if (head == null) {
-                head = newNode;
-                tail = newNode;
-            } else {
-                tail.next = newNode;
-                tail = newNode;
-            }
-        }
-
-        // Find middle using fast and slow pointers
-        Node slow = head;
-        Node fast = head;
-        while (fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-        }
-
-        // Reverse second half of the linked list
-        Node secondHalfHead = reverseLinkedList(slow);
-
-        // Compare first half and reversed second half
-        Node firstHalfPointer = head;
-        Node secondHalfPointer = secondHalfHead;
-
-        boolean isPalindrome = true;
-        while (secondHalfPointer != null) {
-            if (firstHalfPointer.data != secondHalfPointer.data) {
-                isPalindrome = false;
-                break;
-            }
-            firstHalfPointer = firstHalfPointer.next;
-            secondHalfPointer = secondHalfPointer.next;
-        }
+        // Call recursive palindrome checker
+        boolean result = isPalindrome(text, 0, text.length() - 1);
 
         // Print result
-        if (isPalindrome) {
+        if (result) {
             System.out.println(text + " is a Palindrome");
         } else {
             System.out.println(text + " is NOT a Palindrome");

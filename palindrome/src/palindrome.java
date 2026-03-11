@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 
 public class palindrome {
@@ -5,34 +7,37 @@ public class palindrome {
 
 
 
-            // Hardcoded string
-            String text = "madam";
+        String text = "madam";
 
-            // Create Stack
-            Stack<Character> stack = new Stack<Character>();
+        // Create Stack and Queue
+        Stack<Character> stack = new Stack<Character>();
+        Queue<Character> queue = new LinkedList<Character>();
 
-            // Push characters into stack
-            for (int i = 0; i < text.length(); i++) {
-                stack.push(text.charAt(i));
+        // Enqueue characters and Push into stack
+        for (int i = 0; i < text.length(); i++) {
+            char ch = text.charAt(i);
+            stack.push(ch);
+            queue.add(ch);
+        }
+
+        boolean isPalindrome = true;
+
+        // Compare dequeue from queue and pop from stack
+        for (int i = 0; i < text.length(); i++) {
+            char fromQueue = queue.remove(); // FIFO
+            char fromStack = stack.pop();    // LIFO
+
+            if (fromQueue != fromStack) {
+                isPalindrome = false;
+                break;
             }
+        }
 
-            boolean isPalindrome = true;
-
-            // Pop and compare characters
-            for (int i = 0; i < text.length(); i++) {
-                char poppedChar = stack.pop();
-                if (text.charAt(i) != poppedChar) {
-                    isPalindrome = false;
-                    break;
-                }
-            }
-
-            // Print result
-            if (isPalindrome) {
-                System.out.println(text + " is a Palindrome");
-            } else {
-                System.out.println(text + " is NOT a Palindrome");
-
+        // Print result
+        if (isPalindrome) {
+            System.out.println(text + " is a Palindrome");
+        } else {
+            System.out.println(text + " is NOT a Palindrome");
         }
 
     }

@@ -1,26 +1,38 @@
 public class palindrome {
 
-    // Method to reverse a linked list
     public static void main(String[] args) {
 
-        // Hardcoded string with mixed case and spaces
-        String text = "A man a plan a canal Panama";
+        String text = "racecar";
 
-        // Normalize string: remove spaces and convert to lowercase
-        String normalized = text.replaceAll("\\s+", "").toLowerCase();
+        // Create PalindromeChecker object
+        PalindromeChecker checker = new PalindromeChecker();
 
-        // Reverse the normalized string
-        String reversed = "";
-        for (int i = normalized.length() - 1; i >= 0; i--) {
-            reversed += normalized.charAt(i);
-        }
+        // Check palindrome
+        boolean result = checker.checkPalindrome(text);
 
-        // Compare original normalized with reversed
-        if (normalized.equals(reversed)) {
-            System.out.println("\"" + text + "\" is a Palindrome (ignoring spaces and case)");
+        // Print result
+        if (result) {
+            System.out.println(text + " is a Palindrome");
         } else {
-            System.out.println("\"" + text + "\" is NOT a Palindrome (ignoring spaces and case)");
-        }
+            System.out.println(text + " is NOT a Palindrome");
         }
     }
+}
+
+// PalindromeChecker class encapsulates palindrome logic
+class PalindromeChecker {
+
+    // Method to check palindrome using loop
+    public boolean checkPalindrome(String str) {
+        String reversed = "";
+
+        // Build reversed string
+        for (int i = str.length() - 1; i >= 0; i--) {
+            reversed += str.charAt(i);
+        }
+
+        // Compare original and reversed string
+        return str.equals(reversed);
+    }
+}
 

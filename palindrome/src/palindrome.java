@@ -7,20 +7,25 @@ interface PalindromeStrategy {
     boolean isPalindrome(String text);
 }
 
+// Loop-based strategy
+class LoopStrategy implements PalindromeStrategy {
+    @Override
+    public boolean isPalindrome(String text) {
+        int n = text.length();
+        for (int i = 0; i < n / 2; i++) {
+            if (text.charAt(i) != text.charAt(n - i - 1)) return false;
+        }
+        return true;
+    }
+}
+
 // Stack-based strategy
 class StackStrategy implements PalindromeStrategy {
     @Override
     public boolean isPalindrome(String text) {
         Stack<Character> stack = new Stack<>();
-        for (char c : text.toCharArray()) {
-            stack.push(c);
-        }
-
-        for (char c : text.toCharArray()) {
-            if (c != stack.pop()) {
-                return false;
-            }
-        }
+        for (char c : text.toCharArray()) stack.push(c);
+        for (char c : text.toCharArray()) if (c != stack.pop()) return false;
         return true;
     }
 }
@@ -30,20 +35,14 @@ class DequeStrategy implements PalindromeStrategy {
     @Override
     public boolean isPalindrome(String text) {
         Deque<Character> deque = new ArrayDeque<>();
-        for (char c : text.toCharArray()) {
-            deque.addLast(c);
-        }
-
-        while (deque.size() > 1) {
-            if (deque.removeFirst() != deque.removeLast()) {
-                return false;
-            }
-        }
+        for (char c : text.toCharArray()) deque.addLast(c);
+        while (deque.size() > 1)
+            if (deque.removeFirst() != deque.removeLast()) return false;
         return true;
     }
 }
 
-// Context class that uses a strategy
+// Context class
 class PalindromeCheckerContext {
     private PalindromeStrategy strategy;
 
@@ -60,20 +59,32 @@ class PalindromeCheckerContext {
     }
 }
 
-// Main app
+// Main App
 public class palindrome {
 
     public static void main(String[] args) {
 
-        String text = "madam";
+        String text = "A man a plan a canal Panama".replaceAll("\\s+", "").toLowerCase();
 
-        // Choose strategy dynamically
-        PalindromeCheckerContext checker = new PalindromeCheckerContext(new StackStrategy());
-        System.out.println("Using StackStrategy: " + text + " -> " +
-                (checker.check(text) ? "Palindrome" : "Not Palindrome"));
+        // Loop Strategy
+        PalindromeCheckerContext checker = new PalindromeCheckerContext(new LoopStrategy());
+        long start = System.nanoTime();
+        checker.check(text);
+        long end = System.nanoTime();
+        System.out.println("LoopStrategy Time: " + (end - start) + " ns");
 
+        // Stack Strategy
+        checker.setStrategy(new StackStrategy());
+        start = System.nanoTime();
+        checker.check(text);
+        end = System.nanoTime();
+        System.out.println("StackStrategy Time: " + (end - start) + " ns");
+
+        // Deque Strategy
         checker.setStrategy(new DequeStrategy());
-        System.out.println("Using DequeStrategy: " + text + " -> " +
-                (checker.check(text) ? "Palindrome" : "Not Palindrome"));
+        start = System.nanoTime();
+        checker.check(text);
+        end = System.nanoTime();
+        System.out.println("DequeStrategy Time: " + (end - start) + " ns");
     }
 }
